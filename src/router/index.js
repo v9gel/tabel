@@ -18,7 +18,12 @@ const routes = [
     component: Tabel
   },
   {
-    path: "/tabel/:id",
+    path: "/tabel/:podrazdel_org",
+    name: "Tabel",
+    component: Tabel
+  },
+  {
+    path: "/onetabel/:id",
     name: "OneTabel",
     component: OneTabel
   },

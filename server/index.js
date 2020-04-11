@@ -37,12 +37,28 @@ function simpleExecute(statement, binds = [], opts = {}) {
 export default async (app, http) => {
   app.use(cors());
   app.use(express.json());
-  app.get("/tabels", async (req, res) => {
-    let result = await simpleExecute("SELECT * FROM Admin.TABEL");
-    res.json({ result });
+  app.get("/tabel/:id", async (req, res) => {
+    let statement =
+      "SELECT TO_CHAR(TABEL.STARTDATE,  'MM') as MONTH,\n" +
+      "       TO_CHAR(TABEL.STARTDATE,  'YYYY') as YEHR,\n" +
+      "       NUMDOC,\n" +
+      "       PK_TABEL\n" +
+      "FROM TABEL\n" +
+      "WHERE PK_PODRAZDEL = " +
+      req.params.id;
+    let result = await simpleExecute(statement);
+    res.json(result.rows);
   });
 
-  app.get("/tabels/:id", async (req, res) => {
+  app.get("/podrazdelorg", async (req, res) => {
+    let statement =
+      "SELECT PK_PODRAZDEL, NAME, PK_PODRAZDEL_PK_PODRAZDEL as PARENT\n" + "FROM PODRAZDELORG";
+    let result = await simpleExecute(statement);
+
+    res.json(result.rows);
+  });
+
+  app.get("/onetabel/:id", async (req, res) => {
     let statement =
       "SELECT DAY1,DAY2,DAY3,DAY4,DAY5,DAY6,DAY7,DAY8,DAY9,DAY10,DAY11,DAY12,DAY13,DAY14,DAY15,DAY16,DAY17,DAY18,DAY19,DAY20,DAY21,DAY22,DAY23,DAY24,DAY25,DAY26,DAY27,DAY28,DAY29,DAY29,DAY30,DAY31, JOB_POSITION.NAME AS JOB_POSITION_NAME, PERSONCARD.TABEL_NUM,\n" +
       "       PERSONCARD.SURNAME || ' ' || SUBSTR(PERSONCARD.NAME, 0, 1) || '.' || SUBSTR(PERSONCARD.MIDDLENAME, 0, 1) || '.' as FIO,\n" +
@@ -59,7 +75,6 @@ export default async (app, http) => {
       "  AND TABEL.PK_PODRAZDEL = PODRAZDELORG.PK_PODRAZDEL";
 
     let result = await simpleExecute(statement);
-
 
     res.json(result.rows);
   });

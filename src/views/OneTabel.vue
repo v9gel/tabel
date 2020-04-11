@@ -170,7 +170,7 @@ export default {
     HotTable
   },
   mounted() {
-    this.axios.get(`http://localhost:3000/tabels/${this.$route.params.id}`).then(response => {
+    this.axios.get(`http://localhost:3000/onetabel/${this.$route.params.id}`).then(response => {
       console.log(response.data);
       this.data = response.data;
     });
