@@ -9,5 +9,6 @@ module.exports = {
     disableHostCheck: true
   },
 
-  lintOnSave: false
+  lintOnSave: false,
+  publicPath: "",
 };

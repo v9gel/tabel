@@ -6,7 +6,9 @@
         Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b> c {{ data[0].STARTDATE }} по
         {{ data[0].ENDDATE }}
         <el-button @click="handleBack" size="mini">Назад</el-button>
-        <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited">Сохранить</el-button>
+        <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited"
+          >Сохранить</el-button
+        >
       </p>
       <hot-table :data="data" :colHeaders="colHeaders" :row="row" :columns="columns"></hot-table>
     </div>
@@ -15,6 +17,7 @@
 
 <script>
 import { HotTable } from "@handsontable/vue";
+import url from "../config";
 var hash = require("object-hash");
 
 export default {
@@ -184,7 +187,7 @@ export default {
     handleSave() {}
   },
   mounted() {
-    this.axios.get(`http://localhost:3000/onetabel/${this.$route.params.id}`).then(response => {
+    this.axios.get(url + `/onetabel/${this.$route.params.id}`).then(response => {
       console.log(response.data);
       this.data = response.data;
       this.dataStartHash = hash(this.data);

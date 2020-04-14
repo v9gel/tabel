@@ -19,8 +19,12 @@
             <el-table-column prop="NUMDOC" label="№ документа"> </el-table-column>
             <el-table-column label="Действия">
               <template slot-scope="scope">
-                <el-button size="mini" type="primary" @click="handleOpen(scope.row)">Открыть</el-button>
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Изменить</el-button>
+                <el-button size="mini" type="primary" @click="handleOpen(scope.row)"
+                  >Открыть</el-button
+                >
+                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
+                  >Изменить</el-button
+                >
                 <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
                   >Удалить</el-button
                 >
@@ -41,6 +45,7 @@
 </template>
 
 <script>
+import url from "../config";
 export default {
   name: "Tabel",
   data() {
@@ -52,26 +57,25 @@ export default {
   methods: {
     async handleNodeClick(data) {
       this.tabels = null;
-      await this.axios.get(`http://localhost:3000/tabel/${data.id}`).then(response => {
+      this.$root.config.api_url;
+      await this.axios.get(url + `/tabel/${data.id}`).then(response => {
         console.log(response.data);
         this.tabels = response.data;
       });
     },
-    handleOpen(row){
-      this.$router.replace('/onetabel/'+row.PK_TABEL);
+    handleOpen(row) {
+      this.$router.replace("/onetabel/" + row.PK_TABEL);
     }
   },
   async mounted() {
-    await this.axios.get(`http://localhost:3000/podrazdelorg`).then(response => {
+    await this.axios.get(url + `/podrazdelorg`).then(response => {
       console.log(response.data);
       this.tree = response.data;
     });
-    await this.axios
-      .get(`http://localhost:3000/tabel/${this.$route.params.podrazdel_org || 1}`)
-      .then(response => {
-        console.log(response.data);
-        this.tabels = response.data;
-      });
+    await this.axios.get(url + `/tabel/${this.$route.params.podrazdel_org || 1}`).then(response => {
+      console.log(response.data);
+      this.tabels = response.data;
+    });
   }
 };
 </script>
