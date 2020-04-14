@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div v-if="data == null">Загрузка данных...</div>
+    <div v-if="data == null"><i class="el-icon-loading" /></div>
     <div v-if="data != null">
       <p>
         Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b> c {{ data[0].STARTDATE }} по
         {{ data[0].ENDDATE }}
-        <button>Сохранить</button>
+        <el-button @click="handleBack" size="mini">Назад</el-button>
+        <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited">Сохранить</el-button>
       </p>
       <hot-table :data="data" :colHeaders="colHeaders" :row="row" :columns="columns"></hot-table>
     </div>
@@ -14,12 +15,14 @@
 
 <script>
 import { HotTable } from "@handsontable/vue";
+var hash = require("object-hash");
 
 export default {
   name: "OneTabel",
   data() {
     return {
       data: null,
+      dataStartHash: null,
       colHeaders: [
         "ФИО",
         "Должность",
@@ -169,10 +172,22 @@ export default {
   components: {
     HotTable
   },
+  computed: {
+    isEdited() {
+      return this.dataStartHash === hash(this.data);
+    }
+  },
+  methods: {
+    handleBack() {
+      this.$router.replace("/tabel/" + 1);
+    },
+    handleSave() {}
+  },
   mounted() {
     this.axios.get(`http://localhost:3000/onetabel/${this.$route.params.id}`).then(response => {
       console.log(response.data);
       this.data = response.data;
+      this.dataStartHash = hash(this.data);
     });
   }
 };

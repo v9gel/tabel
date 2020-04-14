@@ -53,9 +53,37 @@ export default async (app, http) => {
   app.get("/podrazdelorg", async (req, res) => {
     let statement =
       "SELECT PK_PODRAZDEL, NAME, PK_PODRAZDEL_PK_PODRAZDEL as PARENT\n" + "FROM PODRAZDELORG";
-    let result = await simpleExecute(statement);
+    let result = (await simpleExecute(statement)).rows;
+    console.log({ t: result });
 
-    res.json(result.rows);
+    let tree = [];
+    let treeKey = {};
+    let newList = result.filter(e => {
+      if (e.PARENT === null) {
+        let obj = {
+          label: e.NAME,
+          id: e.PK_PODRAZDEL,
+          children: []
+        };
+        tree.push(obj);
+        treeKey[e.PK_PODRAZDEL] = obj;
+      } else {
+        return e;
+      }
+    });
+    newList = newList.sort((a, b) => (a.PARENT > b.PARENT ? 1 : -1));
+
+    let newList2 = newList.map(e => {
+      let obj = {
+        label: e.NAME,
+        id: e.PK_PODRAZDEL,
+        children: []
+      };
+      treeKey[e.PARENT].children.push(obj);
+      treeKey[e.PK_PODRAZDEL] = obj;
+    });
+
+    res.json(tree);
   });
 
   app.get("/onetabel/:id", async (req, res) => {
