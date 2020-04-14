@@ -9,8 +9,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    redirect: { name: "Tabel" }
   },
   {
     path: "/tabel",
@@ -19,7 +18,7 @@ const routes = [
   },
   {
     path: "/tabel/:podrazdel_org",
-    name: "Tabel",
+    name: "Tabel1",
     component: Tabel
   },
   {
