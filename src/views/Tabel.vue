@@ -1,19 +1,18 @@
 <template>
   <div>
     <el-container>
-      <el-header>Header</el-header>
+<!--      <el-header>Header</el-header>-->
       <el-container>
         <el-aside width="400px">
           <el-tree
             v-if="tree != null"
             :data="tree"
-            :props="defaultProps"
             @node-click="handleNodeClick"
           ></el-tree>
           <i v-if="tree == null" class="el-icon-loading" />
         </el-aside>
         <el-main>
-          <el-table v-if="tabels != null" :data="tabels" style="width: 100%">
+          <el-table border v-if="tabels != null" :data="tabels" style="width: 100%">
             <el-table-column prop="MONTH" label="Месяц" width="180"> </el-table-column>
             <el-table-column prop="YEHR" label="Год" width="180"> </el-table-column>
             <el-table-column prop="NUMDOC" label="№ документа"> </el-table-column>
@@ -57,7 +56,6 @@ export default {
   methods: {
     async handleNodeClick(data) {
       this.tabels = null;
-      this.$root.config.api_url;
       await this.axios.get(url + `/tabel/${data.id}`).then(response => {
         console.log(response.data);
         this.tabels = response.data;

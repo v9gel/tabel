@@ -184,7 +184,13 @@ export default {
     handleBack() {
       this.$router.replace("/tabel/" + 1);
     },
-    handleSave() {}
+    handleSave() {
+      this.axios.post(url + `/onetabel/${this.$route.params.id}`, {data: this.data}).then(response => {
+        // console.log(response.data);
+        // this.data = response.data;
+        // this.dataStartHash = hash(this.data);
+      });
+    }
   },
   mounted() {
     this.axios.get(url + `/onetabel/${this.$route.params.id}`).then(response => {
