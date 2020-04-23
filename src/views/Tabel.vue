@@ -66,6 +66,7 @@ export default {
     }
   },
   async mounted() {
+    document.title = "Табель учета рабочего времени";
     await this.axios.get(url + `/podrazdelorg`).then(response => {
       console.log(response.data);
       this.tree = response.data;

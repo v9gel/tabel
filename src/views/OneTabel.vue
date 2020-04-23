@@ -197,6 +197,7 @@ export default {
       console.log(response.data);
       this.data = response.data;
       this.dataStartHash = hash(this.data);
+      document.title = "Табель подразделения " + this.data[0].PODRAZDELORG_NAME + " c " + this.data[0].STARTDATE + " по " + this.data[0].ENDDATE;
     });
   }
 };
