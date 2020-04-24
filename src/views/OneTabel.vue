@@ -20,6 +20,56 @@ import { HotTable } from "@handsontable/vue";
 import url from "../config";
 var hash = require("object-hash");
 
+const sources = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "Я",
+  "Н",
+  "РВ",
+  "С",
+  "ВМ",
+  "К",
+  "ПК",
+  "ПМ",
+  "ОТ",
+  "ОД",
+  "У",
+  "УВ",
+  "УД",
+  "Р",
+  "ОЖ",
+  "ДО",
+  "ОЗ",
+  "ДБ",
+  "Б",
+  "Т",
+  "ЛЧ",
+  "ПВ",
+  "Г",
+  "ПР",
+  "НС",
+  "В",
+  "ОВ",
+  "НВ",
+  "ЗБ",
+  "НН",
+  "РП",
+  "НП",
+  "ВП",
+  "НО",
+  "НБ",
+  "НЗ",
+  ""
+];
+
 export default {
   name: "OneTabel",
   data() {
@@ -77,97 +127,190 @@ export default {
           readOnly: true
         },
         {
-          data: "DAY1"
+          data: "DAY1",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY2"
+          data: "DAY2",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY3"
+          data: "DAY3",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY4"
+          data: "DAY4",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY5"
+          data: "DAY5",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY6"
+          data: "DAY6",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY7"
+          data: "DAY7",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY8"
+          data: "DAY8",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY9"
+          data: "DAY9",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY10"
+          data: "DAY10",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY11"
+          data: "DAY11",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY12"
+          data: "DAY12",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY13"
+          data: "DAY13",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY14"
+          data: "DAY14",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY15"
+          data: "DAY15",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY16"
+          data: "DAY16",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY17"
+          data: "DAY17",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY18"
+          data: "DAY18",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY19"
+          data: "DAY19",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY20"
+          data: "DAY20",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY21"
+          data: "DAY21",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY22"
+          data: "DAY22",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY23"
+          data: "DAY23",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY24"
+          data: "DAY24",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY25"
+          data: "DAY25",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY26"
+          data: "DAY26",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY27"
+          data: "DAY27",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY28"
+          data: "DAY28",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY29"
+          data: "DAY29",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY30"
+          data: "DAY30",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         },
         {
-          data: "DAY31"
+          data: "DAY31",
+          type: "autocomplete",
+          source: sources,
+          strict: true
         }
       ]
     };
@@ -185,11 +328,13 @@ export default {
       this.$router.replace("/tabel/" + 1);
     },
     handleSave() {
-      this.axios.post(url + `/onetabel/${this.$route.params.id}`, {data: this.data}).then(response => {
-        // console.log(response.data);
-        // this.data = response.data;
-        // this.dataStartHash = hash(this.data);
-      });
+      this.axios
+        .post(url + `/onetabel/${this.$route.params.id}`, { data: this.data })
+        .then(response => {
+          // console.log(response.data);
+          // this.data = response.data;
+          // this.dataStartHash = hash(this.data);
+        });
     }
   },
   mounted() {
@@ -197,7 +342,13 @@ export default {
       console.log(response.data);
       this.data = response.data;
       this.dataStartHash = hash(this.data);
-      document.title = "Табель подразделения " + this.data[0].PODRAZDELORG_NAME + " c " + this.data[0].STARTDATE + " по " + this.data[0].ENDDATE;
+      document.title =
+        "Табель подразделения " +
+        this.data[0].PODRAZDELORG_NAME +
+        " c " +
+        this.data[0].STARTDATE +
+        " по " +
+        this.data[0].ENDDATE;
     });
   }
 };
