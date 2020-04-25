@@ -12,8 +12,8 @@ function simpleExecute(statement, binds = [], opts = {}) {
     try {
       conn = await oracledb.getConnection({
         user: "admin",
-        password: "xF08aNKj5jLbE6AwjDMR",
-        connectString: "database.culvgvczooqb.us-east-2.rds.amazonaws.com/ORCL"
+        password: "Ntcnbhjdfybt_01",
+        connectString: "database-1.carm3vtno1l6.us-east-2.rds.amazonaws.com/ORCL"
       });
 
       const result = await conn.execute(statement, binds, opts);
