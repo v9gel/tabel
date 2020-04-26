@@ -55,11 +55,12 @@ export default {
     async handleNodeClick(data) {
       this.curPodrazdel.id = data.id;
       this.curPodrazdel.label = data.label;
-      this.$router.replace("/tabel/" + data.id);
+      this.$router.push({ path: `/tabel/${data.id}` })
+
       this.$root.$emit("updateTabel");
     },
     handleOpen(row) {
-      this.$router.replace("/onetabel/" + row.PK_TABEL);
+      this.$router.push({ path: `/onetabel/${row.PK_TABEL}` })
     }
   },
   async mounted() {

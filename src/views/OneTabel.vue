@@ -5,7 +5,8 @@
       <p>
         Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b> c {{ data[0].STARTDATE }} по
         {{ data[0].ENDDATE }}
-        <el-button @click="handleBack" size="mini">Назад</el-button>
+        <el-button @click="handleBack" size="mini">Назад к списку табелей</el-button>
+        <el-button @click="update" size="mini">Обновить</el-button>
         <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited"
           >Сохранить</el-button
         >
@@ -325,7 +326,8 @@ export default {
   },
   methods: {
     handleBack() {
-      this.$router.replace("/tabel/" + 1);
+      this.$router.go(-1);
+      // this.$router.replace("/tabel/" + 1);
     },
     handleSave() {
       this.axios
@@ -335,21 +337,24 @@ export default {
           // this.data = response.data;
           // this.dataStartHash = hash(this.data);
         });
+    },
+    update() {
+      this.axios.get(url + `/onetabel/${this.$route.params.id}`).then(response => {
+        console.log(response.data);
+        this.data = response.data;
+        this.dataStartHash = hash(this.data);
+        document.title =
+          "Табель подразделения " +
+          this.data[0].PODRAZDELORG_NAME +
+          " c " +
+          this.data[0].STARTDATE +
+          " по " +
+          this.data[0].ENDDATE;
+      });
     }
   },
   mounted() {
-    this.axios.get(url + `/onetabel/${this.$route.params.id}`).then(response => {
-      console.log(response.data);
-      this.data = response.data;
-      this.dataStartHash = hash(this.data);
-      document.title =
-        "Табель подразделения " +
-        this.data[0].PODRAZDELORG_NAME +
-        " c " +
-        this.data[0].STARTDATE +
-        " по " +
-        this.data[0].ENDDATE;
-    });
+    this.update();
   }
 };
 </script>
