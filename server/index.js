@@ -19,9 +19,9 @@ function simpleExecute(statement, binds = [], opts = {}) {
       const result = await conn.execute(statement, binds, opts);
       // const result1 = await conn.execute('COMMIT;', binds, opts);
 
-      resolve(result);
+      await resolve(result);
     } catch (err) {
-      reject(err);
+      await reject(err);
     } finally {
       if (conn) {
         // conn assignment worked, need to close
@@ -38,6 +38,7 @@ function simpleExecute(statement, binds = [], opts = {}) {
 export default async (app, http) => {
   app.use(cors());
   app.use(express.json());
+
   app.get("/tabel/:id", async (req, res) => {
     let statement =
       "SELECT TO_CHAR(TABEL.STARTDATE,  'MM') as MONTH,\n" +
@@ -45,7 +46,7 @@ export default async (app, http) => {
       "       NUMDOC,\n" +
       "       PK_TABEL\n" +
       "FROM TABEL\n" +
-      "WHERE PK_PODRAZDEL = " +
+      "WHERE DELETED = 1 AND PK_PODRAZDEL = " +
       req.params.id;
     let result = await simpleExecute(statement);
     res.json(result.rows);
@@ -55,7 +56,7 @@ export default async (app, http) => {
     let statement =
       "SELECT PK_PODRAZDEL, NAME, PK_PODRAZDEL_PK_PODRAZDEL as PARENT\n" + "FROM PODRAZDELORG";
     let result = (await simpleExecute(statement)).rows;
-    console.log({ t: result });
+    // console.log({ t: result });
 
     let tree = [];
     let treeKey = {};
@@ -108,10 +109,18 @@ export default async (app, http) => {
     res.json(result.rows);
   });
 
+  app.delete("/onetabel/:id", async (req, res) => {
+    console.log(req.params.id);
+    let statement = "UPDATE TABEL SET DELETED = 2 WHERE PK_TABEL = " + req.params.id;
+    let result = await simpleExecute(statement);
+    let result2 = await simpleExecute("COMMIT WORK");
+    res.json('ok');
+  });
+
   app.post("/onetabel/:id", async (req, res) => {
     for (let i = 0; i < req.body.data.length; i++) {
       let e = req.body.data[i];
-      console.log(e);
+      // console.log(e);
       let statement =
         "UPDATE ADMIN.STR_TABEL\n" +
         "SET DAY1 = '" +
@@ -209,11 +218,11 @@ export default async (app, http) => {
         "'\n" +
         "WHERE PK_STR_TABEL = " +
         e.PK_STR_TABEL;
-      console.log(statement);
+      // console.log(statement);
 
       let result = await simpleExecute(statement);
     }
-    let result2 = await simpleExecute("COMMIT WORK;");
+    let result2 = await simpleExecute("COMMIT WORK");
 
     // console.log(e);
 
