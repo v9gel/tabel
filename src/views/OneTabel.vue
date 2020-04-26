@@ -2,9 +2,11 @@
   <div>
     <div v-if="data == null"><i class="el-icon-loading" /></div>
     <div v-if="data != null">
-      <p>
-        Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b> c {{ data[0].STARTDATE }} по
-        {{ data[0].ENDDATE }}
+      <p style="margin-top: 3px">
+        Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b
+        >, номер <b>{{ data[0].NUMDOC }}</b
+        >, за месяц
+        <b>{{ data[0].STARTDATE }}</b>{{' '}}
         <el-button @click="handleBack" size="mini">Назад к списку табелей</el-button>
         <el-button @click="update" size="mini">Обновить</el-button>
         <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited"

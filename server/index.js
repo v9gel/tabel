@@ -92,7 +92,8 @@ export default async (app, http) => {
     let statement =
       "SELECT STR_TABEL.PK_STR_TABEL as PK_STR_TABEL, DAY1,DAY2,DAY3,DAY4,DAY5,DAY6,DAY7,DAY8,DAY9,DAY10,DAY11,DAY12,DAY13,DAY14,DAY15,DAY16,DAY17,DAY18,DAY19,DAY20,DAY21,DAY22,DAY23,DAY24,DAY25,DAY26,DAY27,DAY28,DAY29,DAY29,DAY30,DAY31, JOB_POSITION.NAME AS JOB_POSITION_NAME, PERSONCARD.TABEL_NUM,\n" +
       "       PERSONCARD.SURNAME || ' ' || SUBSTR(PERSONCARD.NAME, 0, 1) || '.' || SUBSTR(PERSONCARD.MIDDLENAME, 0, 1) || '.' as FIO,\n" +
-      "       TO_CHAR(TABEL.STARTDATE,  'DD.MM.YY') as STARTDATE,\n" +
+      "       TO_CHAR(TABEL.STARTDATE,  'MM.YYYY') as STARTDATE,\n" +
+      "       TABEL.NUMDOC as NUMDOC,\n" +
       "       TO_CHAR(TABEL.ENDDATE,  'DD.MM.YY') as ENDDATE," +
       "       PODRAZDELORG.NAME as PODRAZDELORG_NAME\n" +
       "FROM STR_TABEL, PERSONCARD, JOB_POSITION, TABEL, PODRAZDELORG\n" +
@@ -114,7 +115,34 @@ export default async (app, http) => {
     let statement = "UPDATE TABEL SET DELETED = 2 WHERE PK_TABEL = " + req.params.id;
     let result = await simpleExecute(statement);
     let result2 = await simpleExecute("COMMIT WORK");
-    res.json('ok');
+    res.json("ok");
+  });
+
+  app.post("/onetabel/add", async (req, res) => {
+    //let statement = "INSERT INTO TABEL (PK_TABEL, STARTDATE, ENDDATE, PK_PODRAZDEL) VALUES (sq_tabel.NEXTVAL, TO_DATE('2003/07/09', 'yyyy/mm/dd'), TO_DATE('2003/07/09', 'yyyy/mm/dd'), 1)";
+    console.log(req.body.month+'fr');
+    let statement =
+      "DECLARE\n" +
+      "    pk NUMBER:= sq_tabel.NEXTVAL;\n" +
+      "BEGIN\n" +
+      "    INSERT INTO TABEL (PK_TABEL, NUMDOC, STARTDATE, ENDDATE, PK_PODRAZDEL) VALUES (pk, TO_CHAR(pk), TO_DATE('"+req.body.year+"/"+(req.body.month+1)+"/01', 'yyyy/mm/dd'), TO_DATE('"+req.body.year+"/"+(req.body.month+1)+"/01', 'yyyy/mm/dd'), "+ req.body.podrazdelorg +");\n" +
+      "\n" +
+      "    FOR c1 in (SELECT PK_PERSONCARD from PERSONCARD WHERE PK_TABEL = "+ req.body.podrazdelorg +") LOOP\n" +
+      "        INSERT INTO STR_TABEL (PK_STR_TABEL, PK_TABEL, PK_PERSONCARD) VALUES (SQ_STR_TABEL.nextval, pk, c1.PK_PERSONCARD);\n" +
+      "    END LOOP;\n" +
+      "END;";
+    let result = await simpleExecute(statement);
+
+    let result2 = await simpleExecute("COMMIT WORK");
+
+    console.log(4);
+
+    // console.log({ f: req.body.data[0] });
+    // await simpleExecute("COMMIT WORK;");
+
+    // let result = await simpleExecute(statement);
+
+    res.json("ok");
   });
 
   app.post("/onetabel/:id", async (req, res) => {
