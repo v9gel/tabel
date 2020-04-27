@@ -5,15 +5,21 @@
       <p style="margin-top: 3px">
         Табель подразделения <b>{{ data[0].PODRAZDELORG_NAME }}</b
         >, номер <b>{{ data[0].NUMDOC }}</b
-        >, за месяц
-        <b>{{ data[0].STARTDATE }}</b>{{' '}}
+        >, за месяц <b>{{ data[0].STARTDATE }}</b
+        >{{ " " }}
         <el-button @click="handleBack" size="mini">Назад к списку табелей</el-button>
         <el-button @click="update" size="mini">Обновить</el-button>
         <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited"
           >Сохранить</el-button
         >
       </p>
-      <hot-table :data="data" :colHeaders="colHeaders" :row="row" :columns="columns"></hot-table>
+      <hot-table
+        :data="data"
+        :colHeaders="colHeaders"
+        :row="row"
+        :columns="columns"
+        :hiddenColumns="{ columns: hiddenColumns, indicators: false }"
+      ></hot-table>
     </div>
   </div>
 </template>
@@ -324,6 +330,27 @@ export default {
   computed: {
     isEdited() {
       return this.dataStartHash === hash(this.data);
+    },
+    hiddenColumns() {
+      Date.prototype.daysInMonth = function() {
+        return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
+      };
+      let d = new Date();
+      let s = this.data[0].STARTDATE.split(".");
+      d.setDate(1);
+      d.setMonth(parseInt(s[0]) - 1);
+      d.setFullYear(parseInt(s[1]));
+
+      let h = d.daysInMonth();
+      if(h === 28){
+        return [31,32,33]
+      }
+      if(h === 29){
+        return [32,33]
+      }
+      if(h === 30){
+        return [33]
+      }
     }
   },
   methods: {
