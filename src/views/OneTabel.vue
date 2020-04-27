@@ -365,7 +365,7 @@ export default {
     handleSave() {
       this.disabled = true;
       this.axios
-        .post(url + `/onetabel/${this.$route.params.id}`, { data: this.data })
+        .post(url + `/onetabel/${this.$route.params.id}`, { data: this.data }, {'timeout': 30000})
         .then(response => {
           this.disabled = false;
           // console.log(response.data);
