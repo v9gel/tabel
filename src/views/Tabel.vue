@@ -9,22 +9,11 @@
           <i v-if="tree == null" class="el-icon-loading" />
         </el-aside>
         <el-main>
-          <p v-if="tabels != null">
+          <p>
             Список табелей для подразделения <b>{{ curPodrazdel.label }}</b>
             <AddTabel :cur-podrazdel="curPodrazdel"></AddTabel>
-            <el-date-picker
-              size="mini"
-              v-model="value2"
-              type="monthrange"
-              align="right"
-              unlink-panels
-              range-separator="To"
-              start-placeholder="Start month"
-              end-placeholder="End month"
-              :picker-options="pickerOptions">
-            </el-date-picker>
           </p>
-          <el-table border v-if="tabels != null" :data="tabels" style="width: 100%">
+          <el-table border v-if="tabels != null" :data="filtredTabels" style="width: 100%">
             <el-table-column prop="MONTH" label="Месяц" width="180"> </el-table-column>
             <el-table-column prop="YEHR" label="Год" width="180"> </el-table-column>
             <el-table-column prop="NUMDOC" label="№ документа"> </el-table-column>
@@ -91,8 +80,40 @@ export default {
       curPodrazdel: {
         label: null,
         id: null
-      }
+      },
+      f: 1
     };
+  },
+  computed: {
+    filtredTabels() {
+      if (this.f) {
+        let f = this.$localStorage.get("filter");
+
+        if (f) {
+          let s = new Date();
+          s.setFullYear(f.s.y);
+          s.setMonth(f.s.m);
+          s.setDate(1);
+          let en = new Date();
+          en.setFullYear(f.e.y);
+          en.setMonth(f.e.m);
+          en.setDate(1);
+          let temp = this.tabels.filter(e => {
+            let cur = new Date();
+            cur.setMonth(parseInt(e.MONTH));
+            cur.setDate(1);
+            cur.setFullYear(parseInt(e.YEHR));
+
+            if (s <= cur && cur <= en) {
+              return e;
+            }
+          });
+          return temp;
+        } else {
+          return this.tabels;
+        }
+      }
+    }
   },
   methods: {
     async handleNodeClick(data) {
@@ -115,6 +136,10 @@ export default {
         .then(response => {
           this.tabels = response.data;
         });
+    });
+
+    this.$root.$on("changeFilter", () => {
+      this.f++;
     });
 
     await this.axios.get(url + `/podrazdelorg`).then(response => {
