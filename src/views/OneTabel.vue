@@ -7,11 +7,14 @@
         >, номер <b>{{ data[0].NUMDOC }}</b
         >, за месяц <b>{{ data[0].STARTDATE }}</b
         >{{ " " }}
-        <el-button @click="handleBack" size="mini">Назад к списку табелей</el-button>
-        <el-button @click="update" size="mini">Обновить</el-button>
-        <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited"
+        <el-button @click="handleBack" :disabled="disabled" size="mini"
+          >Назад к списку табелей</el-button
+        >
+        <el-button @click="update" :disabled="disabled" size="mini">Обновить</el-button>
+        <el-button @click="handleSave" size="mini" type="primary" :disabled="isEdited || disabled"
           >Сохранить</el-button
         >
+        {{ " " }}<i v-if="disabled" class="el-icon-loading" />
       </p>
       <hot-table
         :data="data"
@@ -321,7 +324,8 @@ export default {
           source: sources,
           strict: true
         }
-      ]
+      ],
+      disabled: false
     };
   },
   components: {
@@ -342,14 +346,14 @@ export default {
       d.setFullYear(parseInt(s[1]));
 
       let h = d.daysInMonth();
-      if(h === 28){
-        return [31,32,33]
+      if (h === 28) {
+        return [31, 32, 33];
       }
-      if(h === 29){
-        return [32,33]
+      if (h === 29) {
+        return [32, 33];
       }
-      if(h === 30){
-        return [33]
+      if (h === 30) {
+        return [33];
       }
     }
   },
@@ -359,9 +363,11 @@ export default {
       // this.$router.replace("/tabel/" + 1);
     },
     handleSave() {
+      this.disabled = true;
       this.axios
         .post(url + `/onetabel/${this.$route.params.id}`, { data: this.data })
         .then(response => {
+          this.disabled = false;
           // console.log(response.data);
           // this.data = response.data;
           // this.dataStartHash = hash(this.data);
