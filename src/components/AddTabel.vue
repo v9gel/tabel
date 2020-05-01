@@ -30,7 +30,7 @@
         label-width="120px"
         class="demo-ruleForm"
       >
-        <el-form-item label="Подразделение" prop="date">
+        <el-form-item label="Подразделение" prop="lab">
           <el-input v-model="curPodrazdel.label" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Месяц" prop="date">
@@ -156,6 +156,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.dialogVisible = false;
     }
   }
 };
